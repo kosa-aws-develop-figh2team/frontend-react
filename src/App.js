@@ -2,32 +2,32 @@
 // import './App.css';
 
 // function App() {
-//   const [text, setText] = useState('');
-//   const [username, setUsername] = useState('');
-//   const [displayedText, setDisplayedText] = useState('');
-//   const [displayedAuthor, setDisplayedAuthor] = useState('');
+  // const [servId, setServId] = useState('');
+  // const [target, setTaget] = useState('');
+  // const [content, setContent] = useState('');
+  // const [period, setPeriod] = useState('');
 
-//   useEffect(() => {
-//     fetch(`${process.env.REACT_APP_SERVER_URL}/api/text`)
-//       .then(res => res.json())
-//       .then(data => {
-//         let text = data.text.split("by")[0]
-//         let author = data.text.split("by")[1]
-//         setDisplayedText(text);
-//         setDisplayedAuthor(author)
-//       });
-//   }, []);
+  // useEffect(() => {
+  //   fetch(`${process.env.REACT_APP_SERVER_URL}/api/text`)
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       let text = data.text.split("by")[0]
+  //       let author = data.text.split("by")[1]
+  //       setDisplayedText(text);
+  //       setDisplayedAuthor(author)
+  //     });
+  // }, []);
 
-//   const handleSubmit = e => {
-//     e.preventDefault();
-//     fetch(`${process.env.REACT_APP_SERVER_URL}/api/text`, {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ text, username }),
-//     });
-//     setText('');
-//     setUsername('');
-//   };
+  // const handleSubmit = e => {
+  //   e.preventDefault();
+  //   fetch(`${process.env.REACT_APP_SERVER_URL}/api/text`, {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify({ text, username }),
+  //   });
+  //   setText('');
+  //   setUsername('');
+  // };
 
 //   return (
 //     <div className="App">
@@ -55,7 +55,8 @@
 
 // export default App;
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from 'react';
+
 // 챗봇
 import ChatHeader from "./components/ChatHeader";
 import ChatMessages from "./components/ChatMessages";
@@ -82,18 +83,41 @@ function App() {
     }, 600);
   };
 
-  // 예시 데이터
-  const [policies] = useState([
-    { id: 1, name: "청년 주거 지원", target: "청년", content: "임대료 지원", period: "2024.01~12" },
-    { id: 2, name: "창업 지원금", target: "예비 창업자", content: "창업 자금 지원", period: "상시" },
-    { id: 3, name: "육아 지원", target: "부모", content: "보육료 지원", period: "2024.03~11" },
-  ]);
+  const [policies, setPolicies] = useState([]);
   const [selected, setSelected] = useState([]);
 
+  // 서버에서 정책 데이터 불러오기
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/policies`)
+      .then(res => res.json())
+      .then(data => {
+        setPolicies(data); // 서버에서 받아온 정책 데이터를 상태에 저장
+      })
+      .catch(err => {
+        console.error('정책 데이터를 불러오는 중 오류 발생:', err);
+      });
+  }, []);
+
+  // 예시 데이터
+  // const [policies] = useState([
+  //   { id: 1, name: "청년 주거 지원", target: "청년", content: "임대료 지원", period: "2024.01~12" },
+  //   { id: 2, name: "창업 지원금", target: "예비 창업자", content: "창업 자금 지원", period: "상시" },
+  //   { id: 3, name: "육아 지원", target: "부모", content: "보육료 지원", period: "2024.03~11" },
+  // ]);
+  // const [selected, setSelected] = useState([]);
+
   // 정책 선택/해제
+  // const toggleSelect = (id) => {
+  //   setSelected((prev) =>
+  //     prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+  //   );
+  // };
+
   const toggleSelect = (id) => {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+    setSelected((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((item) => item !== id)
+        : [...prevSelected, id]
     );
   };
 
