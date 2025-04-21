@@ -1,0 +1,58 @@
+.policy-compare-container {
+    width: 400px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 32px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-top: 20px;
+    font-family: sans-serif;
+  }
+  
+  .chat-header {
+    display: flex;
+    padding: 15px 22px;
+    align-items: center;
+    background: #6D4FC2;
+    justify-content: space-between;
+  }
+  
+  .header-info .logo-text {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    text-align: center;
+    padding: 22px;
+    background: #F6F2FF;
+    flex: 1;
+  }
+  
+  .compare-table th,
+  .compare-table td {
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .field-label {
+    font-weight: bold;
+    background: #F6F2FF !important;
+    color: #6D4FC2;
+  }
+  
