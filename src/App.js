@@ -1,67 +1,13 @@
-// import React, { useState, useEffect } from 'react';
-// import './App.css';
-
-// function App() {
-  // const [servId, setServId] = useState('');
-  // const [target, setTaget] = useState('');
-  // const [content, setContent] = useState('');
-  // const [period, setPeriod] = useState('');
-
-  // useEffect(() => {
-  //   fetch(`${process.env.REACT_APP_SERVER_URL}/api/text`)
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       let text = data.text.split("by")[0]
-  //       let author = data.text.split("by")[1]
-  //       setDisplayedText(text);
-  //       setDisplayedAuthor(author)
-  //     });
-  // }, []);
-
-  // const handleSubmit = e => {
-  //   e.preventDefault();
-  //   fetch(`${process.env.REACT_APP_SERVER_URL}/api/text`, {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({ text, username }),
-  //   });
-  //   setText('');
-  //   setUsername('');
-  // };
-
-//   return (
-//     <div className="App">
-//       <h1>확신없는 랜덤 명언</h1>
-//       <h2>{displayedText ? displayedText : "아직 저장된 명언이 없거나 서버와 연결되지 않았습니다."}</h2>
-//       <h2>by {displayedAuthor}</h2>
-//       <form onSubmit={handleSubmit}>
-//         <input
-//           type="text"
-//           placeholder="Enter text"
-//           value={text}
-//           onChange={e => setText(e.target.value)}
-//         />
-//         <input
-//           type="text"
-//           placeholder="Enter username"
-//           value={username}
-//           onChange={e => setUsername(e.target.value)}
-//         />
-//         <button type="submit">명언 저장</button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// export default App;
-
 import React, { useState, useEffect } from 'react';
 
+//헤더
+import Header from "./components/Header";
+
 // 챗봇
-import ChatHeader from "./components/ChatHeader";
 import ChatMessages from "./components/ChatMessages";
 import ChatForm from "./components/ChatForm";
 import "./styles/chatbot.css";
+
 // 정책 비교
 import PolicySearch from "./components/PolicySearch";
 import PolicyCompare from "./components/PolicyCompare";
@@ -88,30 +34,20 @@ function App() {
 
   // 서버에서 정책 데이터 불러오기
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/policies`)
+    fetch(`${process.env.REACT_APP_SERVER_URL}/items`)
       .then(res => res.json())
       .then(data => {
-        setPolicies(data); // 서버에서 받아온 정책 데이터를 상태에 저장
+        // 서버에서 받아온 정책 데이터에 고유 id 추가
+        const policiesWithId = data.map(policy => ({
+          ...policy,
+          id: policy.service_id // service_id를 id로 사용
+        }));
+        setPolicies(policiesWithId);
       })
       .catch(err => {
         console.error('정책 데이터를 불러오는 중 오류 발생:', err);
       });
   }, []);
-
-  // 예시 데이터
-  // const [policies] = useState([
-  //   { id: 1, name: "청년 주거 지원", target: "청년", content: "임대료 지원", period: "2024.01~12" },
-  //   { id: 2, name: "창업 지원금", target: "예비 창업자", content: "창업 자금 지원", period: "상시" },
-  //   { id: 3, name: "육아 지원", target: "부모", content: "보육료 지원", period: "2024.03~11" },
-  // ]);
-  // const [selected, setSelected] = useState([]);
-
-  // 정책 선택/해제
-  // const toggleSelect = (id) => {
-  //   setSelected((prev) =>
-  //     prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
-  //   );
-  // };
 
   const toggleSelect = (id) => {
     setSelected((prevSelected) =>
@@ -122,34 +58,41 @@ function App() {
   };
 
   return (
-    <div>
-    <h1>파2팀..정책찾기/비교 서비스</h1>
+    <div style={{ background: "#F6F2FF", minHeight: "100vh" }}>
+      <Header/>
 
-    <div style={{ display: "flex", justifyContent: "center", gap: 40, padding: 20 }}>
-      {/* 왼쪽: 챗봇 */}
-      <div className="chatbot-popup">
-        <ChatHeader />
-        <div className="chat-body">
-          <ChatMessages messages={messages} />
+      <div className="service-content">
+        {/* 1. 챗봇 */}
+        <div className="section-container">
+          <div className="chatbot-popup">
+            <div className="chat-body">
+              <ChatMessages messages={messages} />
+            </div>
+            <div className="chat-footer">
+              <ChatForm onSend={handleSend} />
+            </div>
+          </div>
         </div>
-        <div className="chat-footer">
-          <ChatForm onSend={handleSend} />
-        </div>
-      </div>
 
-      {/* 오른쪽: 정책 검색 & 비교 */}
-      <div style={{ width: 600 }}>
-        <PolicySearch
-          policies={policies}
-          selected={selected}
-          toggleSelect={toggleSelect}
-        />
-        <PolicyCompare
-          policies={policies.filter((p) => selected.includes(p.id))}
-        />
+        {/* 2. 정책 리스트 */}
+        <div className="section-container">
+          <PolicySearch
+            policies={policies}
+            selected={selected}
+            toggleSelect={toggleSelect}
+          />
+        </div>
+
+        {/* 3. 정책 비교 */}
+        <div className="section-container">
+          <PolicyCompare
+            policies={policies.filter((p) => selected.includes(p.id))}
+            onClose={() => setSelected([])}
+          />
+        </div>
       </div>
     </div>
-  </div>
+
   );
 }
 
