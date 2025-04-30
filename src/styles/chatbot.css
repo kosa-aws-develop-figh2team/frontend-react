@@ -1,11 +1,9 @@
 .chatbot-popup {
     height: 550px;
-    background: #fff;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     position: relative;
-    margin: 0 auto 0 auto;
   }
   
   .chat-header {
@@ -57,7 +55,7 @@
   }
   
   .chat-footer {
-    background: #F6F2FF;;
+    background: #F6F2FF;
     padding: 15px 22px 20px;
   }
   

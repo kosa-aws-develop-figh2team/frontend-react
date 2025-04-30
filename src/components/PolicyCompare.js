@@ -6,7 +6,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Alert,
   useTheme
 } from '@mui/material';
 
@@ -57,13 +56,7 @@ function PolicyCompare({ policies = [] }) {
 
   // 정책이 충분하지 않은 경우 처리
   if (!policies || policies.length < 2) {
-    return (
-      <Box sx={{ my: 3 }}>
-        <Alert severity="info" sx={{ borderRadius: 2 }}>
-          비교할 정책이 충분하지 않습니다. 두 개의 정책을 선택해주세요.
-        </Alert>
-      </Box>
-    );
+    return;
   }
 
   const [left, right] = policies;
@@ -71,7 +64,7 @@ function PolicyCompare({ policies = [] }) {
   const rightName = right?.json?.wantedDtl?.servNm || "정책 2";
 
   return (
-    <Box className="policy-table" sx={{ p: 2 }}>
+    <Box className="policy-table" sx={{ p: 2, backgroundColor: "#F6F2FF" }}>
       <Table>
         <TableHead>
           <TableRow>

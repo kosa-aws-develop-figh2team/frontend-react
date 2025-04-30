@@ -69,7 +69,7 @@ function PolicySearch({ policies, selected, toggleSelect }) {
 
   return (
     <div>
-      <Box className="policy-search" sx={{ p: 2 }}>
+      <Box className="policy-search" sx={{ p: 2, backgroundColor: "#F6F2FF" }}>
         {mappedPolicies.length > 0 ? (
           <List disablePadding>
             {mappedPolicies.map((policy) => (
